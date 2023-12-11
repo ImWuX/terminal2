@@ -1,0 +1,42 @@
+:root {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+}
+
+body {
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#terminal {
+    position: absolute;
+    inset: 15px;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
+    overflow: hidden;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+    width: 5px;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+}
+
+.acrylic {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background-blend-mode: exclusion;
+    background: rgba(0, 0, 0, 0.5);
+    background-image: url(noise.png);
+}
+
