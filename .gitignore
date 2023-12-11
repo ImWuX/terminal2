@@ -1,0 +1,4 @@
+terminal2
+terminal.db
+*.sql
+node_modules/

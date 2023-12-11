@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Terminal</title>
+
+        <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+        <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css" />
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="node_modules/xterm/lib/xterm.js"></script>
+        <script src="node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+        <script src="node_modules/@xterm/addon-web-links/lib/addon-web-links.js"></script>
+        <script src="node_modules/toastr/build/toastr.min.js"></script>
+
+        <link rel="shortcut icon" href="https://files.thenest.dev/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="terminal.css">
+        <script src="terminal.js" type="module" defer></script>
+    </head>
+    <body id="body">
+        <div id="wrapper" oncontextmenu="return false;">
+            <div id="terminal"></div>
+        </div>
+    </body>
+</html>
