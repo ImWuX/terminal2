@@ -166,5 +166,6 @@ func main() {
 		conn.waiter.Wait()
 	}))
 
+	fmt.Printf("Serving at %s\n", ctx.bindAddress)
 	http.ListenAndServe(ctx.bindAddress, nil)
 }
