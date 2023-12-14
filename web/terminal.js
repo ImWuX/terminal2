@@ -46,15 +46,16 @@ ws.addEventListener("open", () => {
     ws.addEventListener("message", async (event) => {
         const encodedMessage = new TextEncoder().encode(event.data);
         if(encodedMessage.length < 1) return;
+        const messageData = new TextDecoder().decode(encodedMessage.slice(1));
         switch(encodedMessage[0]) {
             case 1:
-                terminal.write(String.fromCharCode(...encodedMessage.slice(1)));
+                terminal.write(messageData);
                 break;
             case 2:
-                connId = String.fromCharCode(...encodedMessage.slice(1));
+                connId = messageData;
                 break;
             case 3:
-                const theme = JSON.parse(String.fromCharCode(...encodedMessage.slice(1)));
+                const theme = JSON.parse(messageData);
                 bodyElem.style.backgroundColor = theme.xTerm.backgroundColor;
                 if(theme.bgImg) {
                     wrapperElem.classList.add("acrylic");
@@ -74,10 +75,10 @@ ws.addEventListener("open", () => {
                 console.log(`Loaded theme ${theme.id}`);
                 break;
             case 4:
-                toastr.success(String.fromCharCode(...encodedMessage.slice(1)));
+                toastr.success(messageData);
                 break;
             case 5:
-                window.open(`${String.fromCharCode(...encodedMessage.slice(1))}?connectionId=${connId}`, "_blank")
+                window.open(`${messageData}?connectionId=${connId}`, "_blank")
                 break;
         }
     });
