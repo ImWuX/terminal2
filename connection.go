@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"github.com/creack/pty"
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 type Connection struct {
@@ -39,7 +39,7 @@ func (conn *Connection) close() {
 }
 
 func (conn *Connection) wsWrite(messageType byte, data []byte) {
-	_, err := conn.ws.Write(append([]byte{messageType}, data...))
+	err := conn.ws.WriteMessage(websocket.BinaryMessage, append([]byte{messageType}, data...))
 	if err != nil {
 		fmt.Println(">> wsWrite() error.", err)
 		conn.close()
@@ -87,23 +87,29 @@ func (conn *Connection) handlePTY() {
 
 func (conn *Connection) handleSocket() {
 	defer fmt.Printf(">> HandleSocket(%s) closed\n", conn.id)
-	buf := make([]byte, 2048)
 	for {
-		n, err := conn.ws.Read(buf)
+		mtype, buf, err := conn.ws.ReadMessage()
+		if mtype == -1 || mtype == websocket.CloseMessage || mtype == websocket.CloseMessageTooBig {
+			return
+		}
+		if mtype != websocket.BinaryMessage {
+			fmt.Println(">> invalid message type:", mtype)
+			return
+		}
 		if err != nil {
 			fmt.Println(">> ws read error.", err)
 			return
 		}
-		if n < 1 {
+		if len(buf) < 1 {
 			continue
 		}
 		switch buf[0] {
 		case 1: // UTF-8 Encoded Key
-			if n < 2 {
+			if len(buf) < 2 {
 				continue
 			}
 			chLen := buf[1]
-			if n != 2+int(chLen) {
+			if len(buf) != 2+int(chLen) {
 				continue
 			}
 			_, err = conn.pty.Write(buf[2 : 2+chLen])
@@ -112,7 +118,7 @@ func (conn *Connection) handleSocket() {
 				return
 			}
 		case 2: // Term Resize
-			if n < 5 {
+			if len(buf) < 5 {
 				continue
 			}
 			cols := uint16(buf[1])<<8 | uint16(buf[2])

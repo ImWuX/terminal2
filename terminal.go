@@ -12,9 +12,9 @@ import (
 	"sync"
 
 	"github.com/creack/pty"
+	"github.com/gorilla/websocket"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/prometheus/procfs"
-	"golang.org/x/net/websocket"
 )
 
 const ENV_ID_NAME = "TERMINAL2_ID"
@@ -66,6 +66,7 @@ func main() {
 	databasePath := flag.String("database", "terminal.db", "Path to the database")
 	webPath := flag.String("webdir", "./web", "Path to the static web folder")
 	flag.Parse()
+
 	bindEnv, bindEnvPresent := os.LookupEnv("BIND")
 	if bindEnvPresent {
 		*bindAddress = bindEnv
@@ -102,11 +103,22 @@ func main() {
 	}
 	ctx.procFs = procFs
 
+	var upgrader = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+
 	http.Handle("/", http.FileServer(http.Dir(*webPath)))
 	http.HandleFunc("/download", ctx.fileDownload)
 	http.HandleFunc("/upload", ctx.fileUpload)
-	http.Handle("/ws", websocket.Handler(func(c *websocket.Conn) {
-		conn := Connection{ws: c, downloadPath: "", dead: false}
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ws, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			ws.Close()
+			return
+		}
+
+		conn := Connection{ws: ws, downloadPath: "", dead: false}
 		conn.waiter.Add(1)
 
 		ctx.lock.Lock()
@@ -164,7 +176,7 @@ func main() {
 		go conn.handlePTY()
 		go conn.handleSocket()
 		conn.waiter.Wait()
-	}))
+	})
 
 	fmt.Printf("Serving at %s\n", ctx.bindAddress)
 	http.ListenAndServe(ctx.bindAddress, nil)

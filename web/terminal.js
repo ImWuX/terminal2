@@ -5,6 +5,7 @@ const wrapperElem = document.getElementById("wrapper");
 const terminalElem = document.getElementById("terminal");
 
 const ws = new WebSocket(`wss://${location.host}/ws`);
+ws.binaryType = "arraybuffer";
 
 let connId = null;
 
@@ -44,10 +45,14 @@ ws.addEventListener("open", () => {
         ws.send(new Uint8Array([1, encodedData.length, ...encodedData]));
     });
     ws.addEventListener("message", async (event) => {
-        const encodedMessage = new TextEncoder().encode(event.data);
-        if(encodedMessage.length < 1) return;
-        const messageData = new TextDecoder().decode(encodedMessage.slice(1));
-        switch(encodedMessage[0]) {
+        if(!(event.data instanceof ArrayBuffer)) {
+            console.error("websocket message is not binary");
+            return;
+        }
+        const data = new DataView(event.data);
+        if(data.byteLength < 0) return;
+        const messageData = new TextDecoder().decode(data.buffer.slice(1));
+        switch(data.getUint8(0)) {
             case 1:
                 terminal.write(messageData);
                 break;
