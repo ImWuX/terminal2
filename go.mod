@@ -8,6 +8,8 @@ require github.com/creack/pty v1.1.21
 
 require github.com/mattn/go-sqlite3 v1.14.18
 
+require github.com/gorilla/websocket v1.5.1
+
 require (
 	github.com/prometheus/procfs v0.12.0
 	golang.org/x/sys v0.15.0 // indirect
