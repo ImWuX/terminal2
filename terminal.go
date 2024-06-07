@@ -65,6 +65,7 @@ func main() {
 	bindAddress := flag.String("bind", "127.0.0.1:4100", "Bind address")
 	databasePath := flag.String("database", "terminal.db", "Path to the database")
 	webPath := flag.String("webdir", "./web", "Path to the static web folder")
+	shell := flag.String("shell", "bash", "Which shell to use")
 	flag.Parse()
 
 	bindEnv, bindEnvPresent := os.LookupEnv("BIND")
@@ -78,6 +79,10 @@ func main() {
 	webEnv, webEnvPresent := os.LookupEnv("WEBDIR")
 	if webEnvPresent {
 		*webPath = webEnv
+	}
+	shellEnv, shellEnvPresent := os.LookupEnv("SHELL")
+	if shellEnvPresent {
+		*shell = shellEnv
 	}
 
 	ctx := &Context{
@@ -114,7 +119,6 @@ func main() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			fmt.Println(err)
 			ws.Close()
 			return
 		}
@@ -139,7 +143,7 @@ func main() {
 			return
 		}
 
-		cmd := exec.Command("/bin/bash")
+		cmd := exec.Command("/usr/bin/env", *shell)
 		if dir, err := os.UserHomeDir(); err != nil {
 			conn.close()
 			return
