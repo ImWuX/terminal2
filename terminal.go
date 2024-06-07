@@ -143,7 +143,7 @@ func main() {
 			return
 		}
 
-		cmd := exec.Command("/usr/bin/env", *shell)
+		cmd := exec.Command(*shell)
 		if dir, err := os.UserHomeDir(); err != nil {
 			conn.close()
 			return
