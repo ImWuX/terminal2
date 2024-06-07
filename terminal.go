@@ -68,19 +68,19 @@ func main() {
 	shell := flag.String("shell", "bash", "Which shell to use")
 	flag.Parse()
 
-	bindEnv, bindEnvPresent := os.LookupEnv("TERMINAL2_BIND")
+	bindEnv, bindEnvPresent := os.LookupEnv("TERMINALTWO_BIND")
 	if bindEnvPresent {
 		*bindAddress = bindEnv
 	}
-	dbEnv, dbEnvPresent := os.LookupEnv("TERMINAL2_DATABASE")
+	dbEnv, dbEnvPresent := os.LookupEnv("TERMINALTWO_DATABASE")
 	if dbEnvPresent {
 		*databasePath = dbEnv
 	}
-	webEnv, webEnvPresent := os.LookupEnv("TERMINAL2_WEBDIR")
+	webEnv, webEnvPresent := os.LookupEnv("TERMINALTWO_WEBDIR")
 	if webEnvPresent {
 		*webPath = webEnv
 	}
-	shellEnv, shellEnvPresent := os.LookupEnv("TERMINAL2_SHELL")
+	shellEnv, shellEnvPresent := os.LookupEnv("TERMINALTWO_SHELL")
 	if shellEnvPresent {
 		*shell = shellEnv
 	}

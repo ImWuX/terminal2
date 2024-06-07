@@ -5,7 +5,7 @@ Description=terminal2
 Type=simple
 User=<user>
 Group=<user>
-Environment=BIND=127.0.0.1:3000
+Environment=TERMINALTWO_BIND=127.0.0.1:3000
 WorkingDirectory=<root>
 ExecStart=<root>/terminal2
 Restart=always
