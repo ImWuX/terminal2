@@ -16,7 +16,7 @@ Terminal2 provides command-line options for configuration:
 `--bind <address>` sets the bind address for the webserver. Ex. 127.0.0.1:3000  
 `--webdir <path>` sets the location of the static web files.  
 `--shell <shell>` sets the shell which terminal2 will use.  
-**NOTE** the command-line options are also exposed as environment variables with the same name prefixed with `TERMINAL2_` and all uppercase. (`--var` would be `TERMINAL2_VAR`).
+**NOTE** the command-line options are also exposed as environment variables with the same name prefixed with `TERMINALTWO_` and all uppercase. (`--var` would be `TERMINALTWO_VAR`).
 
 ## Usage
 The terminal2 executable doubles as a CLI for terminal2 sessions. The executable is automatically exposed in the PATH of any terminal2 session. CLI options:  
