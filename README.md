@@ -15,6 +15,7 @@ Terminal2 provides command-line options for configuration:
 `--database <path>` sets the location of the SQLite3 database.  
 `--bind <address>` sets the bind address for the webserver. Ex. 127.0.0.1:3000  
 `--webdir <path>` sets the location of the static web files.  
+`--shell <shell>` sets the shell which terminal2 will use.  
 **NOTE** the command-line options are also exposed as environment variables with the same name, just uppercase. (`--var` would be `VAR`).
 
 ## Usage
