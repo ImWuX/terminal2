@@ -114,6 +114,7 @@ func main() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
+			fmt.Println(err)
 			ws.Close()
 			return
 		}
